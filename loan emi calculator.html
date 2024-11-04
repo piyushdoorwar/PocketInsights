@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan EMI Calculator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        .container {
+            flex: 1;
+        }
+        footer {
+            background-color: #343a40;
+            height: 50px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .results p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <h1>Loan EMI Calculator</h1>
+</header>
+
+<!-- Main Content -->
+<div class="container mt-5">
+    <form id="emiCalculatorForm" class="border p-4 rounded shadow-sm" style="max-width: 400px; margin: auto;">
+        <div class="form-group">
+            <label for="loanType">Loan Type</label>
+            <select id="loanType" class="form-control" required>
+                <option value="Personal Loan">Personal Loan</option>
+                <option value="Car Loan">Car Loan</option>
+                <option value="Home Loan">Home Loan</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="loanAmount">Loan Amount</label>
+            <input type="number" class="form-control" id="loanAmount" placeholder="Enter amount" min="0" value="750000" required>
+        </div>
+
+        <div class="form-group">
+            <label for="interestRate">Interest Rate (%)</label>
+            <input type="number" class="form-control" id="interestRate" placeholder="Enter interest rate" min="0" value="11" required>
+        </div>
+
+        <div class="form-group">
+            <label for="loanTenureInput">Loan Tenure</label>
+            <input type="number" class="form-control" id="loanTenureInput" min="0" value="3" required>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tenureToggle" id="years" value="years" checked>
+                <label class="form-check-label" for="years">Years</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tenureToggle" id="months" value="months">
+                <label class="form-check-label" for="months">Months</label>
+            </div>
+        </div>
+
+        <button id="calculateBtn" type="button" class="btn btn-primary btn-block">Calculate EMI</button>
+    </form>
+
+    <div class="results mt-4 text-center" style="display: none;">
+        <h3>Results:</h3>
+        <p>Loan EMI: <span id="emiResult">₹0</span></p>
+        <p>Total Interest Payable: <span id="totalInterest">₹0</span></p>
+        <p>Total Payment (Principal + Interest): <span id="totalPayment">₹0</span></p>
+    </div>
+
+    <div class="mt-4" style="max-width: 300px; margin: auto;">
+        <canvas id="paymentChart" width="300" height="150"></canvas>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-white">
+</footer>
+
+<script>
+    $(document).ready(function () {
+        $('#calculateBtn').click(function () {
+            calculateEmi();
+        });
+
+        $('#loanType').change(function () {
+            updateMaxTenure();
+            calculateEmi(); // Recalculate on loan type change
+        });
+
+        $('#loanTenureInput').on('input', function () {
+            calculateEmi();
+        });
+
+        $('input[name="tenureToggle"]').change(function () {
+            calculateEmi();
+        });
+
+        updateMaxTenure(); // Initial setup
+    });
+
+    function updateMaxTenure() {
+        var loanType = $('#loanType').val();
+        var maxYears;
+
+        if (loanType === 'Car Loan') {
+            maxYears = 7;
+        } else if (loanType === 'Home Loan') {
+            maxYears = 30;
+        } else {
+            maxYears = 5;
+        }
+
+        $('#loanTenureInput').attr('max', maxYears);
+    }
+
+    function calculateEmi() {
+        var loanAmount = parseFloat($('#loanAmount').val());
+        var interestRate = parseFloat($('#interestRate').val()) / 100 / 12;
+        var tenureType = $('input[name="tenureToggle"]:checked').val();
+        var tenureYears = parseFloat($('#loanTenureInput').val());
+        var tenureMonths = tenureType === 'years' ? tenureYears * 12 : tenureYears;
+
+        var emi = (loanAmount * interestRate * Math.pow(1 + interestRate, tenureMonths)) / (Math.pow(1 + interestRate, tenureMonths) - 1);
+        var totalPayment = emi * tenureMonths;
+        var totalInterest = totalPayment - loanAmount;
+
+        $('#emiResult').text('₹' + Math.round(emi).toLocaleString('en-IN'));
+        $('#totalInterest').text('₹' + Math.round(totalInterest).toLocaleString('en-IN'));
+        $('#totalPayment').text('₹' + Math.round(totalPayment).toLocaleString('en-IN'));
+        $('.results').show();
+
+        var principal = loanAmount;
+        var interest = totalInterest;
+        var ctx = document.getElementById('paymentChart').getContext('2d');
+
+        if (window.pieChart) {
+            window.pieChart.destroy();
+        }
+
+        window.pieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Principal Loan Amount', 'Total Interest'],
+                datasets: [{
+                    data: [principal, interest],
+                    backgroundColor: ['#36A2EB', '#FF6384']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            },
+        });
+    }
+</script>
+
+</body>
+</html>
