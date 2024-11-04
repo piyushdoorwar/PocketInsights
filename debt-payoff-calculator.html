@@ -250,6 +250,7 @@
                <th>Month</th>
                <th>Debt Name</th>
                <th>Amount to Pay</th>
+               <th>Amount Due after Payment</th>
            </tr>
        </thead>
        <tbody id="outputTableBody"></tbody>
@@ -270,13 +271,13 @@
            const row = document.createElement("tr");
            row.innerHTML = `
                <td><input type="text" placeholder="e.g., Credit Card" class="tooltip">
-    
+                  
                </td>
                <td><input type="text" placeholder="e.g., 1000" class="tooltip">
                   
                </td>
                <td><input type="text" placeholder="e.g., 15" class="tooltip">
-                  
+                   
                </td>
                <td><input type="text" placeholder="e.g., 50" class="tooltip">
                    
@@ -379,14 +380,17 @@
                    debt.amount = parseFloat((debt.amount * (1 + (debt.interest / 100) / 12)).toFixed(2));
                    totalDebt += debt.amount;
 
-                   monthlyPayments[debt.name] = debt.month_pay.toFixed(2);
+                   monthlyPayments[debt.name] = {
+                       payment: debt.month_pay.toFixed(2),
+                       remaining: debt.amount.toFixed(2),
+                   };
                }
 
                totalDebtHistory.push(totalDebt);
                debtHistory.push(debtList.map(d => d.amount));
 
-               for (const [debtName, payment] of Object.entries(monthlyPayments)) {
-                   outputData.push({ month, debtName, payment });
+               for (const [debtName, { payment, remaining }] of Object.entries(monthlyPayments)) {
+                   outputData.push({ month, debtName, payment, remaining });
                }
            }
 
@@ -405,6 +409,7 @@
                    <td>${entry.month}</td>
                    <td>${entry.debtName}</td>
                    <td>${entry.payment}</td>
+                   <td>${entry.remaining}</td>
                `;
                outputTableBody.appendChild(row);
            });
