@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Debt Payoff Calculator</title>
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+   <style>
+       /* General Styles */
+       body {
+           font-family: 'Arial', sans-serif;
+           margin: 0;
+           padding: 20px;
+           background-color: #f9fafb;
+           color: #333;
+       }
+
+       h1 {
+           text-align: center;
+           color: #444;
+           font-size: 2em;
+           margin-bottom: 0.5em;
+       }
+
+       h2 {
+           text-align: center;
+           font-size: 1.2em;
+           color: #666;
+           margin-bottom: 1.5em;
+       }
+
+       /* Income Input Container */
+       #incomeContainer {
+           max-width: 600px;
+           margin: 20px auto;
+           text-align: center;
+           background-color: #fff;
+           border-radius: 8px;
+           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+           padding: 15px 20px;
+       }
+
+       #incomeContainer label {
+           font-size: 1em;
+           color: #555;
+           margin-right: 10px;
+       }
+
+       #incomeContainer input {
+           padding: 10px;
+           width: 70%;
+           max-width: 300px;
+           border: 1px solid #ddd;
+           border-radius: 4px;
+           box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
+           font-size: 1em;
+           color: #555;
+       }
+
+       /* Debt Table */
+       #debtTable {
+           width: 100%;
+           max-width: 700px;
+           margin: 20px auto;
+           border-collapse: collapse;
+           background-color: #fff;
+           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+           border-radius: 8px;
+           overflow: hidden;
+       }
+
+       #debtTable th {
+           background-color: #6c63ff;
+           color: white;
+           padding: 15px;
+           font-size: 1em;
+           text-align: left;
+       }
+
+       #debtTable td {
+           padding: 12px;
+           border-bottom: 1px solid #eee;
+       }
+
+       #debtTable td input[type="text"] {
+           width: 100%;
+           padding: 8px;
+           border: 1px solid #ddd;
+           border-radius: 4px;
+           font-size: 0.9em;
+           color: #333;
+       }
+
+       /* Tooltip */
+       .tooltip .tooltiptext {
+           visibility: hidden;
+           width: 180px;
+           background-color: #333;
+           color: #fff;
+           text-align: center;
+           padding: 5px 0;
+           border-radius: 6px;
+           position: absolute;
+           z-index: 1;
+           bottom: 125%;
+           left: 50%;
+           margin-left: -90px;
+           opacity: 0;
+           transition: opacity 0.3s;
+       }
+
+       .tooltip:hover .tooltiptext {
+           visibility: visible;
+           opacity: 1;
+       }
+
+       /* Button Styles */
+       .button-container {
+           text-align: center;
+           margin-top: 20px;
+       }
+
+       .button-container button {
+           padding: 12px 20px;
+           margin: 10px;
+           background-color: #6c63ff;
+           color: white;
+           border: none;
+           cursor: pointer;
+           border-radius: 5px;
+           font-size: 1em;
+           font-weight: bold;
+           transition: background-color 0.3s ease;
+       }
+
+       .button-container button:hover {
+           background-color: #5753c9;
+       }
+
+       /* Notification Style */
+       #notification {
+           max-width: 600px;
+           margin: 20px auto;
+           padding: 15px;
+           background-color: #f8d7da;
+           color: #721c24;
+           border: 1px solid #f5c6cb;
+           border-radius: 5px;
+           text-align: center;
+           font-size: 1em;
+           display: none;
+           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+       }
+
+       /* Graph Container */
+       #graph {
+           margin-top: 40px;
+           width: 100%;
+           max-width: 700px;
+           margin: 20px auto;
+           background-color: #fff;
+           padding: 15px;
+           border-radius: 8px;
+           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+       }
+
+       /* Output Table */
+       #outputTable {
+           width: 100%;
+           max-width: 700px;
+           margin: 20px auto;
+           border-collapse: collapse;
+           background-color: #fff;
+           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+           border-radius: 8px;
+           overflow: hidden;
+       }
+
+       #outputTable th {
+           background-color: #6c63ff;
+           color: white;
+           padding: 15px;
+           font-size: 1em;
+       }
+
+       #outputTable td, #outputTable th {
+           padding: 12px;
+           border: 1px solid #eee;
+           text-align: center;
+       }
+
+       /* Alternating row colors */
+       #outputTable tbody tr:nth-child(odd) {
+           background-color: #f9f9f9;
+       }
+
+       #outputTable tbody tr:nth-child(even) {
+           background-color: #e8f0ff;
+       }
+
+       /* Delete Button Style */
+       .delete-button {
+           color: #e74c3c;
+           cursor: pointer;
+           font-size: 1em;
+           transition: color 0.3s;
+       }
+
+       .delete-button:hover {
+           color: #c0392b;
+       }
+   </style>
+</head>
+
+<body>
+
+   <h1>Debt Payoff Calculator</h1>
+   <h2>Calculate your debt payoff timeline using the avalanche method</h2>
+
+   <div id="notification"></div>
+
+   <div id="incomeContainer">
+       <label for="monthlyIncome">Monthly Income After Expenses:</label>
+       <input type="text" id="monthlyIncome" placeholder="Enter amount">
+   </div>
+
+   <table id="debtTable">
+       <thead>
+           <tr>
+               <th>Debt Name</th>
+               <th>Amount</th>
+               <th>Interest Rate (%)</th>
+               <th>Min Monthly Payment</th>
+               <th>Action</th>
+           </tr>
+       </thead>
+       <tbody id="debtInputs"></tbody>
+   </table>
+
+   <div class="button-container">
+       <button onclick="addDebtRow()">Add Debt</button>
+       <button onclick="calculatePayoff()">Calculate Payoff</button>
+   </div>
+
+   <div id="graph"></div>
+   <table id="outputTable" style="display:none;">
+       <thead>
+           <tr>
+               <th>Month</th>
+               <th>Debt Name</th>
+               <th>Amount to Pay</th>
+           </tr>
+       </thead>
+       <tbody id="outputTableBody"></tbody>
+   </table>
+
+   <script>
+       const MAX_DEBTS = 7;
+       let debtCount = 0;
+
+       function addDebtRow() {
+           if (debtCount >= MAX_DEBTS) {
+               showNotification("You can only add up to 7 debts.");
+               return;
+           }
+
+           debtCount++;
+
+           const row = document.createElement("tr");
+           row.innerHTML = `
+               <td><input type="text" placeholder="e.g., Credit Card" class="tooltip">
+    
+               </td>
+               <td><input type="text" placeholder="e.g., 1000" class="tooltip">
+                  
+               </td>
+               <td><input type="text" placeholder="e.g., 15" class="tooltip">
+                  
+               </td>
+               <td><input type="text" placeholder="e.g., 50" class="tooltip">
+                   
+               </td>
+               <td><span class="delete-button" onclick="deleteDebtRow(this)">Delete</span></td>
+           `;
+           document.getElementById("debtInputs").appendChild(row);
+       }
+
+       function deleteDebtRow(button) {
+           button.parentElement.parentElement.remove();
+           debtCount--;
+       }
+
+       function showNotification(message) {
+           const notification = document.getElementById("notification");
+           notification.innerText = message;
+           notification.style.display = "block";
+           setTimeout(() => notification.style.display = "none", 5000);
+       }
+
+       function calculatePayoff() {
+           const monthlyIncome = parseFloat(document.getElementById("monthlyIncome").value);
+
+           if (isNaN(monthlyIncome) || monthlyIncome <= 0) {
+               showNotification("Please enter a valid monthly income after expenses.");
+               return;
+           }
+
+           const debtTable = document.querySelectorAll("#debtInputs tr");
+           const debtList = [];
+           let totalDebt = 0;
+
+           debtTable.forEach((row, index) => {
+               const debtName = row.cells[0].querySelector("input").value;
+               const debtAmount = parseFloat(row.cells[1].querySelector("input").value);
+               const debtInterest = parseFloat(row.cells[2].querySelector("input").value);
+               const debtMinPayment = parseFloat(row.cells[3].querySelector("input").value);
+
+               if (!debtName || isNaN(debtAmount) || isNaN(debtInterest) || isNaN(debtMinPayment)) {
+                   showNotification(`Please enter valid values for Debt ${index + 1}`);
+                   return;
+               }
+
+               debtList.push({
+                   name: debtName,
+                   amount: debtAmount,
+                   interest: debtInterest,
+                   min_mp: debtMinPayment,
+                   month_pay: 0,
+               });
+
+               totalDebt += debtAmount;
+           });
+
+           if (debtList.length === 0) {
+               showNotification("Please add at least one debt to calculate.");
+               return;
+           }
+
+           const totalDebtHistory = [totalDebt];
+           const debtHistory = [debtList.map(d => d.amount)];
+           const outputData = [];
+           let month = 0;
+
+           while (totalDebt > 0 && month < 300) {
+               let money_left = monthlyIncome;
+               month++;
+               const monthlyPayments = {};
+
+               for (let debt of debtList) {
+                   debt.month_pay = 0;
+                   if (debt.amount < debt.min_mp) debt.min_mp = debt.amount;
+
+                   if (debt.min_mp <= money_left) {
+                       debt.amount -= debt.min_mp;
+                       debt.month_pay += debt.min_mp;
+                       money_left -= debt.min_mp;
+                   } else {
+                       debt.amount -= money_left;
+                       debt.month_pay += money_left;
+                       money_left = 0;
+                   }
+               }
+
+               debtList.sort((a, b) => b.interest - a.interest);
+               totalDebt = 0;
+
+               for (let debt of debtList) {
+                   if (debt.amount <= money_left) {
+                       debt.month_pay += debt.amount;
+                       money_left -= debt.amount;
+                       debt.amount = 0;
+                   } else {
+                       debt.amount -= money_left;
+                       debt.month_pay += money_left;
+                       money_left = 0;
+                   }
+
+                   debt.amount = parseFloat((debt.amount * (1 + (debt.interest / 100) / 12)).toFixed(2));
+                   totalDebt += debt.amount;
+
+                   monthlyPayments[debt.name] = debt.month_pay.toFixed(2);
+               }
+
+               totalDebtHistory.push(totalDebt);
+               debtHistory.push(debtList.map(d => d.amount));
+
+               for (const [debtName, payment] of Object.entries(monthlyPayments)) {
+                   outputData.push({ month, debtName, payment });
+               }
+           }
+
+           populateOutputTable(outputData);
+           plotGraph(totalDebtHistory, debtHistory, debtList);
+       }
+
+       function populateOutputTable(data) {
+           const outputTable = document.getElementById("outputTable");
+           const outputTableBody = document.getElementById("outputTableBody");
+           outputTableBody.innerHTML = "";
+
+           data.forEach(entry => {
+               const row = document.createElement("tr");
+               row.innerHTML = `
+                   <td>${entry.month}</td>
+                   <td>${entry.debtName}</td>
+                   <td>${entry.payment}</td>
+               `;
+               outputTableBody.appendChild(row);
+           });
+
+           outputTable.style.display = "table";
+       }
+
+       function plotGraph(totalDebtHistory, debtHistory, debtList) {
+           const months = Array.from({ length: totalDebtHistory.length }, (_, i) => i + 1);
+
+           const data = [
+               {
+                   x: months,
+                   y: totalDebtHistory,
+                   type: "scatter",
+                   name: "Total Debt",
+               },
+               ...debtList.map((debt, index) => ({
+                   x: months,
+                   y: debtHistory.map(monthlyDebt => monthlyDebt[index]),
+                   type: "scatter",
+                   name: debt.name,
+               })),
+           ];
+
+           const layout = {
+               title: "Debt Over Time",
+               xaxis: { title: "Month" },
+               yaxis: { title: "Total Debt" },
+           };
+
+           Plotly.newPlot("graph", data, layout);
+       }
+   </script>
+
+</body>
+</html>
