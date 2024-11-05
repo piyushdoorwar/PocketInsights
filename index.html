@@ -4,151 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PocketInsights Tools</title>
-  <style>
-    /* General styles for tools-home */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f4f6;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .content {
-      width: 90%;
-      max-width: 1200px;
-    }
-
-    /* Header Styling */
-    #header-container header {
-      text-align: center;
-      padding: 20px;
-      background-color: #fff;
-      width: 100%;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    #header-container h1 {
-      font-size: 2.5em;
-      color: #3b82f6;
-    }
-
-    #header-container p {
-      font-size: 1.2em;
-      color: #6b7280;
-    }
-
-    /* Footer Styling */
-    #footer-container footer {
-      background-color: #fff;
-      width: 100%;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    #footer-container p {
-      color: #6b7280;
-      font-size: 0.9em;
-    }
-
-    /* Card Container Styling */
-    .card-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
-
-    /* Card Styling */
-    .card {
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      transition: transform 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-10px);
-    }
-
-    .card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-    }
-
-    .card-content {
-      padding: 15px;
-    }
-
-    .card-content h3 {
-      font-size: 1.5em;
-      margin-bottom: 10px;
-      color: #111827;
-    }
-
-    .card-content p {
-      color: #4b5563;
-      font-size: 0.9em;
-    }
-
-    .card-content a {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 10px 15px;
-      background-color: #3b82f6;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background-color 0.2s ease;
-    }
-
-    .card-content a:hover {
-      background-color: #2563eb;
-    }
-  </style>
+  
+  <!-- Link to external CSS files -->
+  <link rel="stylesheet" href="css/general.css">
+  <link rel="stylesheet" href="css/card.css">
+  <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
 
-  <!-- Placeholder for Header -->
-  <div id="header-container"></div>
+  <!-- Header Section -->
+  <header>
+    <a href="https://blog.pocket-insights.com/" class="blog-button">Go to Blogs</a>
+    <div class="header-content">
+      <h1>PocketInsights Tools</h1>
+      <p>Explore a variety of tools to make your financial journey easier and smarter.</p>
+    </div>
+  </header>
 
   <!-- Card Container -->
   <div class="content card-container" id="card-container"></div>
 
-  <!-- Placeholder for Footer -->
-  <div id="footer-container"></div>
-
-  <!-- JavaScript to Load Header and Footer -->
-  <script>
-    // Function to load HTML fragments with styles and scripts
-    function loadHTMLFragment(id, url) {
-      fetch(url)
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById(id).innerHTML = data;
-        });
-    }
-
-    // Load header and footer on page load
-    window.onload = function() {
-      loadHTMLFragment("header-container", "parent/header.html");
-      loadHTMLFragment("footer-container", "parent/footer.html");
-      displayCards();
-    };
-  </script>
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2024 PocketInsights. All rights reserved.</p>
+  </footer>
 
   <!-- JavaScript to Populate Cards -->
   <script>
-    // Dictionary of tools with name and URL
+    // Dictionary of tools with name, image, and description
     const tools = {
-      "Loan EMI Calculator": ["loan-emi-calculator", "images/loan-emi-calculator.jpeg", "Loan EMI Calculator helps you easily calculate your monthly loan installments (EMI) based on the loan amount, interest rate, and tenure. It provides a quick way to plan and manage loan repayments."],
-      "Debt Payoff Calculator": ["debt-payoff-calculator", "images/debt-payoff-calculator.png", "Debt Payoff Calculator helps you estimate the time needed to pay off your debts based on your payment amount and interest rate. It’s a useful tool for planning debt reduction strategies and achieving financial freedom faster."]
-      };
+      "Loan EMI Calculator": [
+        "loan-emi-calculator", 
+        "images/loan-emi-calculator.jpeg", 
+        "Loan EMI Calculator helps you easily calculate your monthly loan installments (EMI) based on the loan amount, interest rate, and tenure. It provides a quick way to plan and manage loan repayments."
+      ],
+      "Debt Payoff Calculator": [
+        "debt-payoff-calculator", 
+        "images/debt-payoff-calculator.png", 
+        "Debt Payoff Calculator helps you estimate the time needed to pay off your debts based on your payment amount and interest rate. It’s a useful tool for planning debt reduction strategies and achieving financial freedom faster."
+      ]
+    };
 
     // Function to display tool cards
     function displayCards() {
@@ -185,6 +80,9 @@
         cardContainer.appendChild(card);
       }
     }
+
+    // Call displayCards on page load
+    window.onload = displayCards;
   </script>
 
 </body>
