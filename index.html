@@ -103,8 +103,8 @@
 
     // Load header and footer on page load
     window.onload = function() {
-      loadHTMLFragment("header-container", "header.html");
-      loadHTMLFragment("footer-container", "footer.html");
+      loadHTMLFragment("header-container", "parent/header.html");
+      loadHTMLFragment("footer-container", "parent/footer.html");
       displayCards();
     };
   </script>
@@ -113,23 +113,20 @@
   <script>
     // Dictionary of tools with name and URL
     const tools = {
-      "Loan EMI Calculator": "https://example.com/emi-calculator",
-      "Savings Tracker": "https://example.com/savings-tracker",
-      "Investment Planner": "https://example.com/investment-planner",
-      "Credit Score Checker": "https://example.com/credit-score",
-      "Expense Manager": "https://example.com/expense-manager"
-    };
+      "Loan EMI Calculator": ["loan-emi-calculator", "images/loan-emi-calculator.jpeg", "Loan EMI Calculator helps you easily calculate your monthly loan installments (EMI) based on the loan amount, interest rate, and tenure. It provides a quick way to plan and manage loan repayments."],
+      "Debt Payoff Calculator": ["debt-payoff-calculator", "images/debt-payoff-calculator.png", "Debt Payoff Calculator helps you estimate the time needed to pay off your debts based on your payment amount and interest rate. It’s a useful tool for planning debt reduction strategies and achieving financial freedom faster."]
+      };
 
     // Function to display tool cards
     function displayCards() {
       const cardContainer = document.getElementById('card-container');
-      for (let [name, url] of Object.entries(tools)) {
+      for (let [name, data] of Object.entries(tools)) {
         const card = document.createElement('div');
         card.className = 'card';
 
         // Placeholder image
         const img = document.createElement('img');
-        img.src = 'https://via.placeholder.com/250x150.png?text=' + encodeURIComponent(name);
+        img.src = data[1];
         img.alt = name + ' Image';
         card.appendChild(img);
 
@@ -142,11 +139,11 @@
         cardContent.appendChild(title);
 
         const description = document.createElement('p');
-        description.innerText = "A helpful tool for managing your finances efficiently.";
+        description.innerText = data[2];
         cardContent.appendChild(description);
 
         const link = document.createElement('a');
-        link.href = url;
+        link.href = 'https://tools.pocket-insights.com/' + data[0];
         link.target = '_blank';
         link.innerText = 'Try it now';
         cardContent.appendChild(link);
