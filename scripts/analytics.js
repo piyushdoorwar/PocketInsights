@@ -1,3 +1,23 @@
+
+// Dynamically load the Google Analytics library
+(function() {
+  var script = document.createElement("script");
+  script.async = true;
+  script.src = "https://www.googletagmanager.com/gtag/js?id=G-9KBTC02Z34";
+  document.head.appendChild(script);
+
+  // Initialize Google Analytics after the library loads
+  script.onload = function() {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-9KBTC02Z34');
+  };
+})();
+
+
+/*
 // Function to load an external script dynamically
 function loadScript(src, attributes = {}, onloadCallback = null) {
   const script = document.createElement("script");
@@ -34,3 +54,4 @@ loadScript("https://cdn.consentmanager.net/delivery/autoblocking/cb3bc89eb17ed.j
   "data-cmp-cdn": "cdn.consentmanager.net",
   "data-cmp-codesrc": "16"
 });
+*/
