@@ -1,17 +1,24 @@
-/* Styling specific to the Loan EMI Calculator page */
-#emiCalculatorForm {
-    max-width: 400px;
-    margin: auto;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
-
-.results h3 {
-    margin-top: 20px;
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px 0;
+    text-align: center;
 }
-
-.results p {
-    font-size: 1.1rem;
+.container {
+    flex: 1;
 }
-
+footer {
+    background-color: #343a40;
+    height: 50px;
+    text-align: center;
+}
 @media (max-width: 768px) {
     .results p {
         font-size: 1rem;

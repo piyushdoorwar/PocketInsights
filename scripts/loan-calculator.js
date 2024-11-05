@@ -50,7 +50,6 @@ function calculateEmi() {
     $('#totalPayment').text('₹' + Math.round(totalPayment).toLocaleString('en-IN'));
     $('.results').show();
 
-    // Update chart
     var principal = loanAmount;
     var interest = totalInterest;
     var ctx = document.getElementById('paymentChart').getContext('2d');

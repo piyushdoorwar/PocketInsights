@@ -4,82 +4,54 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Debt Payoff Calculator</title>
-   
-   <!-- Bootstrap CSS and Custom CSS -->
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-   <link rel="stylesheet" href="css/general.css">
    <link rel="stylesheet" href="css/debt-calculator.css">
-   
-   <!-- Plotly.js Library for Graphing -->
    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body>
 
-   <!-- Loader -->
-   <div id="loader">
-      <div class="spinner"></div>
+   <h1>Debt Payoff Calculator</h1>
+   <h2>Calculate your debt payoff timeline using the avalanche method</h2>
+
+   <div id="notification"></div>
+
+   <div id="incomeContainer">
+       <label for="monthlyIncome">Monthly Income After Expenses:</label>
+       <input type="text" id="monthlyIncome" placeholder="Enter amount">
    </div>
 
-   <!-- Header -->
-   <header class="text-center py-4 bg-primary text-white">
-       <h1>Debt Payoff Calculator</h1>
-       <p>Calculate your debt payoff timeline using the avalanche method</p>
-   </header>
+   <table id="debtTable">
+       <thead>
+           <tr>
+               <th>Debt Name</th>
+               <th>Amount</th>
+               <th>Interest Rate (%)</th>
+               <th>Min Monthly Payment</th>
+               <th>Action</th>
+           </tr>
+       </thead>
+       <tbody id="debtInputs"></tbody>
+   </table>
 
-   <!-- Main Content -->
-   <div class="container my-4">
-       <div id="notification" class="alert alert-danger text-center" style="display: none;"></div>
-
-       <!-- Monthly Income Input -->
-       <div id="incomeContainer" class="text-center bg-white p-3 rounded shadow-sm">
-           <label for="monthlyIncome" class="font-weight-bold">Monthly Income After Expenses:</label>
-           <input type="number" id="monthlyIncome" class="form-control mt-2" placeholder="Enter amount">
-       </div>
-
-       <!-- Debt Table -->
-       <table id="debtTable" class="table table-bordered mt-4 text-center shadow-sm">
-           <thead class="thead-dark">
-               <tr>
-                   <th>Debt Name</th>
-                   <th>Amount</th>
-                   <th>Interest Rate (%)</th>
-                   <th>Min Monthly Payment</th>
-                   <th>Action</th>
-               </tr>
-           </thead>
-           <tbody id="debtInputs"></tbody>
-       </table>
-
-       <!-- Buttons -->
-       <div class="text-center mt-3">
-           <button class="btn btn-primary mr-2" onclick="addDebtRow()">Add Debt</button>
-           <button class="btn btn-success" onclick="calculatePayoff()">Calculate Payoff</button>
-       </div>
-
-       <!-- Graph -->
-       <div id="graph" class="mt-5"></div>
-
-       <!-- Output Table -->
-       <table id="outputTable" class="table table-striped table-bordered mt-4" style="display:none;">
-           <thead class="thead-dark">
-               <tr>
-                   <th>Month</th>
-                   <th>Debt Name</th>
-                   <th>Amount to Pay</th>
-                   <th>Amount Due after Payment</th>
-               </tr>
-           </thead>
-           <tbody id="outputTableBody"></tbody>
-       </table>
+   <div class="button-container">
+       <button onclick="addDebtRow()">Add Debt</button>
+       <button onclick="calculatePayoff()">Calculate Payoff</button>
    </div>
 
-   <!-- jQuery and Bootstrap JS -->
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+   <div id="graph"></div>
+   <table id="outputTable" style="display:none;">
+       <thead>
+           <tr>
+               <th>Month</th>
+               <th>Debt Name</th>
+               <th>Amount to Pay</th>
+               <th>Amount Due after Payment</th>
+           </tr>
+       </thead>
+       <tbody id="outputTableBody"></tbody>
+   </table>
 
-   <!-- Custom JS for Loader and Debt Calculator -->
-   <script src="js/loader.js"></script>
-   <script src="js/debt-calculator.js"></script>
+   <script src="scripts/debt-calculator.js"></script>
+
 </body>
 </html>
