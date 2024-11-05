@@ -1,0 +1,19 @@
+/* Styling specific to the Loan EMI Calculator page */
+#emiCalculatorForm {
+    max-width: 400px;
+    margin: auto;
+}
+
+.results h3 {
+    margin-top: 20px;
+}
+
+.results p {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .results p {
+        font-size: 1rem;
+    }
+}

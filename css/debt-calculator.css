@@ -1,0 +1,45 @@
+/* Styling specific to the Debt Payoff Calculator page */
+#incomeContainer {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+#debtTable, #outputTable {
+    max-width: 700px;
+    margin: auto;
+}
+
+#debtTable th, #outputTable th {
+    font-size: 1em;
+}
+
+#debtTable td input[type="text"], #incomeContainer input {
+    width: 100%;
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+#notification {
+    display: none;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+#graph {
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+/* Delete Button Style */
+.delete-button {
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 1em;
+    transition: color 0.3s;
+}
+
+.delete-button:hover {
+    color: #c0392b;
+}
