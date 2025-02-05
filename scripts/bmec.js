@@ -1,1 +1,19 @@
-<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="piyushdoorwar" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>
+(function() {
+    function createEmbed() {
+        var scriptTags = document.getElementsByTagName("script");
+        var currentScript = scriptTags[scriptTags.length - 1];
+
+        var embedURL = "https://piyushdoorwar.github.io/PocketInsights/bmac"; // Change to your GitHub Pages URL
+        var iframe = document.createElement("iframe");
+
+        iframe.src = embedURL;
+        iframe.width = "100%";
+        iframe.height = "150"; // Adjust height if needed
+        iframe.style.border = "none";
+        iframe.style.overflow = "hidden";
+
+        currentScript.parentNode.insertBefore(iframe, currentScript);
+    }
+
+    createEmbed();
+})();
