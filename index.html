@@ -1,67 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PocketInsights Tools</title>
-  
-  <!-- Bootstrap CSS for layout and styling -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/general.css">
-  <link rel="stylesheet" href="css/card.css">
-  <link rel="stylesheet" href="css/footer.css">
-  <link rel="stylesheet" href="css/loader.css">
-    
-  <!-- Google Analytics Script -->
-  <script src="scripts/analytics.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Me a Coffee Embed</title>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body>
 
-  <!-- Loader Section -->
-  <div id="loader">
-    <div class="spinner"></div>
-  </div>
-
-  <!-- Main Content Wrapper -->
-  <div id="main-content" class="container-fluid d-flex flex-column flex-grow-1" style="display: none;">
-
-    <!-- Header Section -->
-    <header class="text-center py-4 bg-primary text-white">
-      <a href="https://blog.pocket-insights.com/" class="btn btn-light mb-3">Go to Blogs</a>
-      <div class="header-content">
-        <h1 class="display-4">PocketInsights Tools</h1>
-        <p class="lead">Explore a variety of tools to make your financial journey easier and smarter.</p>
-      </div>
-    </header>
-
-    <!-- Card Container -->
-    <div class="container my-5">
-      <div class="row" id="card-container">
-        <!-- Cards will be populated here by JavaScript -->
-      </div>
+    <div class="container">
+        <script type="text/javascript" 
+            src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" 
+            data-name="bmc-button" 
+            data-slug="piyushdoorwar" 
+            data-color="#FFDD00" 
+            data-emoji=""  
+            data-font="Cookie" 
+            data-text="Buy me a coffee" 
+            data-outline-color="#000000" 
+            data-font-color="#000000" 
+            data-coffee-color="#ffffff">
+        </script>
     </div>
-  </div>
 
-  <!-- Full-Screen Modal -->
-  <div class="modal fade" id="toolModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog custom-modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header border-0">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body p-0">
-          <iframe id="toolIframe" src="" frameborder="0" class="w-100 h-100" style="border-radius: 10px;"></iframe>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-
-  <!-- Link to the main JavaScript file -->
-  <script src="scripts/main.js"></script>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
